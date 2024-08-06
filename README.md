@@ -17,16 +17,16 @@ Langkah Penginstalan :
 - Buat database untuk digunakan oleh aplikasi ini.
 - Konfigurasi file ".env" menjadi seperti :
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=[Nama Database]   -------->> Diisi dengan nama database
-DB_USERNAME=root
-DB_PASSWORD=
-
+DB_CONNECTION=mysql <br>
+DB_HOST=127.0.0.1 <br>
+DB_PORT=3306 <br>
+DB_DATABASE=[Nama Database]   -------->> Diisi dengan nama database <br>
+DB_USERNAME=root <br>
+DB_PASSWORD= <br>
+<br>
 - Jalankan perintah "php artisan migrate --seed" untuk melakukan migrasi database.
 - Jalankan perintah "php artisan storage:link".
 - Mulai server dengan menjalankan perintah "php artisan serve"
 - Masuk dengan akun bawaan :
-    Username : admin
+    Username : admin<br>
     Password : 12345
