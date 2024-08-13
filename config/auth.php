@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'wajibpajak' => [
+            'driver' => 'session',
+            'provider' => 'wajib_pajaks',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'wajib_pajaks' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\WajibPajak::class,
         ],
 
         // 'users' => [

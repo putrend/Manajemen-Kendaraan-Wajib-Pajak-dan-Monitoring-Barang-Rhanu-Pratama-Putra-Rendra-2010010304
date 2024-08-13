@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\BPKB;
-use App\Models\STNK;
-use App\Models\Dealer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BPKBController;
 use App\Http\Controllers\STNKController;
@@ -32,11 +29,16 @@ use App\Http\Controllers\BarangKeluarController;
 |
 */
 
+// Regular Login
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::middleware('auth')->group(function () {
-    Route::get('/home', [DashboardController::class, 'index']);
+// Login Wajib Pajak
+Route::get('/login/wajib-pajak', [LoginController::class, 'showLoginForm'])->name('loginWP')->middleware('guest');
+Route::post('/login/wajib-pajak', [LoginController::class, 'loginWajibPajak']);
+
+Route::middleware('auth:wajibpajak,web')->group(function () {
+    Route::get('/home', [DashboardController::class, 'index'])->name('home');
 
     Route::get('/', function () {
         return view('welcome');
