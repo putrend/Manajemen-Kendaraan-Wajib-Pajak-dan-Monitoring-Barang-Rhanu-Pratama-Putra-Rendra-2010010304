@@ -22,7 +22,7 @@
     <input type="number" name="no_bpkb" placeholder="Masukkan Nomor BPKB" class="form-control">
 
     <label for="no_polisi">Nomor Polisi (Masukkan Hanya Angka, MAX : 4 Nomor)</label>
-    <input type="number" name="no_polisi" placeholder="Masukkan Nomor BPKB" class="form-control">
+    <input type="number" name="no_polisi" placeholder="Masukkan Nomor Polisi" class="form-control">
 
     <label for="kendaraan_id" class="form-label">Kendaraan</label>
     <select name="kendaraan_id" class="form-select">

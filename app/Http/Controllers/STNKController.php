@@ -50,7 +50,6 @@ class STNKController extends Controller
         );
 
         if ($validator->fails()) {
-
             return redirect('stnk/create')->with('fail_create', $validator->errors()->first());
         }
 

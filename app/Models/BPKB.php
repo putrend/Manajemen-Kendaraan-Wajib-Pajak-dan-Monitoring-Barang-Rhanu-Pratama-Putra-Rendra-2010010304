@@ -37,4 +37,9 @@ class BPKB extends Model
     {
         return $this->hasOne(STNK::class, 'bpkb_id', 'id');
     }
+
+    function mutasi()
+    {
+        return $this->hasMany(Mutasi::class, 'bpkb_id', 'id');
+    }
 }

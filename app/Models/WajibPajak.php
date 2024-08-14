@@ -22,4 +22,9 @@ class WajibPajak extends Authenticatable
     {
         return $this->hasMany(BPKB::class);
     }
+
+    public function mutasi()
+    {
+        return $this->hasMany(Mutasi::class);
+    }
 }

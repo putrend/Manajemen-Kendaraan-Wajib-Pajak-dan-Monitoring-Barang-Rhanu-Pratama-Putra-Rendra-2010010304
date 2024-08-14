@@ -15,6 +15,11 @@ class Samsat extends Model
 
     function bpkb()
     {
-        return $this->hasOne(BPKB::class);
+        return $this->hasMany(BPKB::class);
+    }
+
+    function mutasi()
+    {
+        return $this->hasMany(Mutasi::class);
     }
 }

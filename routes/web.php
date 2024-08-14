@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DealerController;
+use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\SamsatController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\KategoriController;
@@ -43,6 +44,8 @@ Route::middleware('auth:wajibpajak,web')->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
+
+    Route::resource('mutasi', MutasiController::class);
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 

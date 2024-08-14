@@ -161,6 +161,14 @@ $user_role = auth()->user()->role;
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/mutasi" class="nav-link {{ request()->is('mutasi') ? 'active' : '' }}">
+                                <i class="nav-icon fa-solid fa-envelope-open-text"></i>
+                                <p>
+                                    Mutasi
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
