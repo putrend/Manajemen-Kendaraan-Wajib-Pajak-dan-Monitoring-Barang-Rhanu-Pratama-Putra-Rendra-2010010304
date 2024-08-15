@@ -163,7 +163,7 @@ $user_role = auth()->user()->role;
                         </li>
                         <li class="nav-item">
                             <a href="/mutasi" class="nav-link {{ request()->is('mutasi') ? 'active' : '' }}">
-                                <i class="nav-icon fa-solid fa-envelope-open-text"></i>
+                                <i class="nav-icon fa-solid fa-file-signature"></i>
                                 <p>
                                     Mutasi
                                 </p>

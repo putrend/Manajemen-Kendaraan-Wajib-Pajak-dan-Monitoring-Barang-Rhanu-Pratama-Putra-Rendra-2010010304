@@ -374,6 +374,108 @@
         });
     });
 
+    $(document).ready(function() {
+        $(".mutasi-delete").on("click", function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            
+            Swal.fire({
+                title: "Apakah Anda yakin ingin menghapus field ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Tidak",
+                confirmButtonText: "Ya"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#mutasi-delete-form').attr('action', '/mutasi/' + id).submit(); // set action dan submit form
+                }
+            });
+        });
+    });
+
+    // Confirm
+    $(document).ready(function() {
+        $(".mutasi-confirm").on("click", function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            
+            Swal.fire({
+                title: "Apakah Anda yakin ingin berlakukan mutasi ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Tidak",
+                confirmButtonText: "Ya"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#mutasi-confirm-form').attr('action', '/mutasi/' + id + '/berlakukan').submit(); // set action dan submit form
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $(".mutasi-cancel").on("click", function(e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            
+            Swal.fire({
+                title: "Apakah Anda yakin ingin batalkan mutasi ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Tidak",
+                confirmButtonText: "Ya"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#mutasi-cancel-form').attr('action', '/mutasi/' + id + '/batalkan').submit(); // set action dan submit form
+                }
+            });
+        });
+    });
+
+    if ($('#success_berlaku').length) {
+        var text = "{{ session('success_berlaku') }}"
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: text 
+        });
+    }
+
+    if ($('#success_dibatalkan').length) {
+        var text = "{{ session('success_dibatalkan') }}"
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: text 
+        });
+    }
+
     // Access Failed
     if ($('#fail_access').length) {
         var text = "{{ session('fail_access') }}"

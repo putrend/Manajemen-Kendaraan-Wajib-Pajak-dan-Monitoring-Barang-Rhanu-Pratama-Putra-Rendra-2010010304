@@ -35,6 +35,8 @@
         <td>
             @if ($m->status == 'Berlaku')
             <span class="badge badge-success">{{ $m->status }}</span>
+            @elseif ($m->status == 'Belum Berlaku')
+            <span class="badge badge-warning">{{ $m->status }}</span>
             @else
             <span class="badge badge-danger">{{ $m->status }}</span>
             @endif
@@ -45,7 +47,11 @@
                 @csrf
                 @method('delete')
                 <a href="/mutasi/{{ $m->id }}" class="btn btn-sm btn-info">Lihat</a>
+                @if ($m->status == 'Belum Berlaku')
                 <a href="/mutasi/{{ $m->id }}/edit" class="btn btn-sm btn-primary">Ubah</a>
+                @else
+                <a href="/mutasi/{{ $m->id }}/edit" class="btn btn-sm btn-primary disabled">Ubah</a>
+                @endif
                 <button class="btn btn-sm btn-danger mutasi-delete" data-id="{{ $m->id }}">Hapus</button>
             </form>
         </td>

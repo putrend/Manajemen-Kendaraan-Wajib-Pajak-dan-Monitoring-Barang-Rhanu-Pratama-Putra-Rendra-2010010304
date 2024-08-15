@@ -6,6 +6,7 @@ use App\Models\BPKB;
 use App\Models\Mutasi;
 use App\Models\Samsat;
 use App\Models\WajibPajak;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -30,18 +31,31 @@ class MutasiController extends Controller
      */
     public function create()
     {
-        // Get all bpkb data
-        $bpkb = BPKB::whereHas('stnk')
+        $bpkb = BPKB::whereHas('stnk')  // Ensure BPKB has related STNK
             ->where(function ($query) {
                 $query->whereHas('mutasi', function ($subQuery) {
-                    $subQuery->where('status', 'Berlaku'); // Ensure Mutasi has status "Berlaku"
-                })->orDoesntHave('mutasi'); // Or ensure BPKB does not have related Mutasi
+                    // Ensure Mutasi has status "Berlaku" or "Dibatalkan"
+                    $subQuery->where('status', 'Berlaku')
+                        ->orWhere('status', 'Dibatalkan');
+                })
+                    ->orDoesntHave('mutasi');  // Or BPKB doesn't have Mutasi at all
             })
             ->where(function ($query) {
+                // Exclude BPKB where only one Mutasi exists with status "Belum Berlaku"
+                $query->whereDoesntHave('mutasi', function ($subQuery) {
+                    // Add GROUP BY and ensure no BPKB with exactly one "Belum Berlaku" Mutasi is included
+                    $subQuery->where('status', 'Belum Berlaku')
+                        ->groupBy('bpkb_id')  // Group by BPKB id
+                        ->havingRaw('COUNT(*) = 1');  // Check if only one record exists
+                });
+            })
+            ->where(function ($query) {
+                // Apply filter for logged-in Wajib Pajak
                 if (Auth::guard('wajibpajak')->check()) {
                     $query->where('wajib_pajak_id', Auth::guard('wajibpajak')->user()->id);
                 }
-            })->get();
+            })
+            ->get();
 
         // Get all samsat data
         $samsat = Samsat::all();
@@ -61,11 +75,18 @@ class MutasiController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'no_polisi' => 'max:4',
+                'bpkb_id'           => 'required',
+                'samsat_tujuan_id'  => 'required',
+                'wajib_pajak_id'    => 'required',
+                'no_polisi_baru'    => 'max:4|required',
             ],
             [
                 // Name custom message for validation
-                'no_polisi.max' => 'Nomor Polisi Maksimal Hanya 4 Angka !',
+                'bpkb_id.required'              => 'BPKB Wajib Diisi !',
+                'samsat_tujuan_id.required'     => 'Samsat Tujuan Wajib Diisi !',
+                'wajib_pajak_id.required'       => 'Wajib Pajak Wajib Diisi !',
+                'no_polisi_baru.max'            => 'Nomor Polisi Maksimal Hanya 4 Angka !',
+                'no_polisi_baru.required'       => 'Nomor Polisi Wajib Diisi !',
             ],
         );
 
@@ -91,7 +112,7 @@ class MutasiController extends Controller
             'samsat_awal_id'        => $bpkb->samsat_sekarang_id,
             'samsat_tujuan_id'      => $request->samsat_tujuan_id,
             'no_pol_lama'           => $bpkb->no_polisi,
-            'no_pol_baru'           => 'DA ' . $request->no_polisi . ' ' . $samsat->kd_samsat,
+            'no_pol_baru'           => 'DA ' . $request->no_polisi_baru . ' ' . $samsat->kd_samsat,
             'status'                => 'Belum Berlaku',
             'keterangan'            => $request->keterangan,
         ]);
@@ -104,7 +125,7 @@ class MutasiController extends Controller
      */
     public function show(Mutasi $mutasi)
     {
-        //
+        return view('mutasi.show', compact('mutasi'));
     }
 
     /**
@@ -135,7 +156,49 @@ class MutasiController extends Controller
      */
     public function update(Request $request, Mutasi $mutasi)
     {
-        //
+        // Validate No Polisi
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'samsat_tujuan_id'  => 'required',
+                'wajib_pajak_id'    => 'required',
+                'no_polisi_baru'    => 'max:4',
+            ],
+            [
+                // Name custom message for validation
+                'samsat_tujuan_id.required'     => 'Samsat Tujuan Wajib Diisi !',
+                'wajib_pajak_id.required'       => 'Wajib Pajak Wajib Diisi !',
+                'no_polisi_baru.max'    => 'Nomor Polisi Maksimal Hanya 4 Angka !',
+            ],
+        );
+
+        if ($validator->fails()) {
+            return redirect('mutasi/' . $mutasi->id . '/edit')->with('fail_edit', $validator->errors()->first());
+        }
+
+        $no_polisi_baru = $request->no_polisi_baru;
+        if ($no_polisi_baru == null) {
+
+            $no_polisi_baru = Str::between($mutasi->no_pol_baru, 'DA ', ' ' . $mutasi->samsat_tujuan->kd_samsat);
+        }
+
+        // Validate samsat tujuan
+        if ($mutasi->samsat_awal->id == $request->samsat_tujuan_id) {
+            return redirect('mutasi/' . $mutasi->id . '/edit')->with('fail_edit', 'Samsat Tujuan Tidak Boleh Sama Dengan Samsat Anda Sekarang !');
+        }
+
+        // Get Kode Samsat for No Pol
+        $samsat = Samsat::where('id', $request->samsat_tujuan_id)->first();
+
+        // Simpan data ke database
+        Mutasi::where('id', $mutasi->id)->update([
+            'samsat_tujuan_id'      => $request->samsat_tujuan_id,
+            'wajib_pajak_id'        => $request->wajib_pajak_id,
+            'no_pol_baru'           => 'DA ' . $no_polisi_baru . ' ' . $samsat->kd_samsat,
+            'keterangan'            => $request->keterangan,
+        ]);
+
+        return redirect('mutasi')->with('success_edit', 'Mutasi Berhasil Di Ubah !');
     }
 
     /**
@@ -143,6 +206,34 @@ class MutasiController extends Controller
      */
     public function destroy(Mutasi $mutasi)
     {
-        //
+        $mutasi->delete();
+        return redirect('mutasi');
+    }
+
+    public function berlakukan(Mutasi $mutasi)
+    {
+        // Ubah data Mutasi Menjadi Berlaku
+        Mutasi::where('id', $mutasi->id)->update([
+            'status'      => 'Berlaku',
+        ]);
+
+        // Ubah data samsat sekarang pada BPKB
+        BPKB::where('id', $mutasi->bpkb_id)->update([
+            'no_polisi' => $mutasi->no_pol_baru,
+            'samsat_sekarang_id' => $mutasi->samsat_tujuan_id,
+        ]);
+
+        return redirect('mutasi/' . $mutasi->id)->with('success_berlaku', 'Mutasi Berhasil Diberlakukan !');
+    }
+
+    public function batalkan(Request $request, Mutasi $mutasi)
+    {
+        // Ubah data Mutasi Menjadi Berlaku
+        Mutasi::where('id', $mutasi->id)->update([
+            'keterangan'  => $request->keterangan,
+            'status'      => 'Dibatalkan',
+        ]);
+
+        return redirect('mutasi/' . $mutasi->id)->with('success_dibatalkan', 'Mutasi Berhasil Dibatalkan !');
     }
 }

@@ -45,6 +45,10 @@ Route::middleware('auth:wajibpajak,web')->group(function () {
         return view('welcome');
     });
 
+    // Mutasi Berlaku atau Dibatalkan, proses perubahan status
+    Route::post('/mutasi/{mutasi}/berlakukan', [MutasiController::class, 'berlakukan']);
+    Route::post('/mutasi/{mutasi}/batalkan', [MutasiController::class, 'batalkan']);
+
     Route::resource('mutasi', MutasiController::class);
     Route::post('/logout', [LoginController::class, 'logout']);
 });

@@ -3,14 +3,14 @@
 @section('JUDUL', 'Ubah Mutasi')
 
 @section('CONTENT')
-@if (session('fail_create'))
-<div id="fail_create"></div>
+@if (session('fail_edit'))
+<div id="fail_edit"></div>
 @endif
 <form action="/mutasi/{{ $mutasi->id }}" method="post">
     @csrf
     @method('PUT')
     <label for="bpkb_id" class="form-label">BPKB</label>
-    <select name="bpkb_id" class="form-select">
+    <select name="bpkb_id" class="form-select" disabled>
         <option value="">--Pilih BPKB--</option>
         <option value="{{ $mutasi->bpkb_id }}" selected>{{ $mutasi->bpkb->no_bpkb }}</option>
         @foreach ($bpkb as $b)
@@ -45,7 +45,7 @@
     @endif
 
     {{-- Get Only Number From No Polisi --}}
-    <?php $no_polisi = Str::between($mutasi->no_pol_baru, 'DA ', ' '.$mutasi->samsat_tujuan->kd_samsat); ?>
+    <?php $no_polisi = Str::between($mutasi->no_pol_baru, 'DA ', ' ' . $mutasi->samsat_tujuan->kd_samsat); ?>
     <label for="no_polisi_baru">Nomor Polisi Baru (Masukkan Hanya Angka, MAX : 4 Nomor)</label>
     <input type="number" name="no_polisi_baru" placeholder="Masukkan Nomor Polisi Baru" class="form-control"
         value="{{ $no_polisi }}">

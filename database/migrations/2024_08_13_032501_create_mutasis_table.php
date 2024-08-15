@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('wajib_pajak_id')->constrained('wajib_pajaks')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->string('no_pol_lama');
             $table->string('no_pol_baru');
-            $table->enum('status', ['Berlaku', 'Belum Berlaku']);
+            $table->enum('status', ['Berlaku', 'Belum Berlaku', 'Dibatalkan']);
             $table->text('keterangan')->nullable();
         });
     }
