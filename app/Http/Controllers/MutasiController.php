@@ -9,7 +9,10 @@ use App\Models\WajibPajak;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MutasiBerlakuNotification;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\MutasiDibatalkanNotification;
 
 class MutasiController extends Controller
 {
@@ -133,6 +136,9 @@ class MutasiController extends Controller
      */
     public function edit(Mutasi $mutasi)
     {
+        if ($mutasi->status != 'Belum Berlaku') {
+            return redirect('mutasi')->with('fail_edit', 'Halaman Tidak Dapat Diakses !');
+        }
         // Get all bpkb data
         $bpkb = BPKB::whereHas('stnk')
             ->where(function ($query) {
@@ -212,7 +218,7 @@ class MutasiController extends Controller
 
     public function berlakukan(Mutasi $mutasi)
     {
-        // Ubah data Mutasi Menjadi Berlaku
+        // // Ubah data Mutasi Menjadi Berlaku
         Mutasi::where('id', $mutasi->id)->update([
             'status'      => 'Berlaku',
         ]);
@@ -222,6 +228,9 @@ class MutasiController extends Controller
             'no_polisi' => $mutasi->no_pol_baru,
             'samsat_sekarang_id' => $mutasi->samsat_tujuan_id,
         ]);
+
+        Mail::to($mutasi->wajib_pajak->email)
+            ->send(new MutasiBerlakuNotification($mutasi));
 
         return redirect('mutasi/' . $mutasi->id)->with('success_berlaku', 'Mutasi Berhasil Diberlakukan !');
     }
@@ -233,6 +242,9 @@ class MutasiController extends Controller
             'keterangan'  => $request->keterangan,
             'status'      => 'Dibatalkan',
         ]);
+
+        Mail::to($mutasi->wajib_pajak->email)
+            ->send(new MutasiDibatalkanNotification($mutasi));
 
         return redirect('mutasi/' . $mutasi->id)->with('success_dibatalkan', 'Mutasi Berhasil Dibatalkan !');
     }

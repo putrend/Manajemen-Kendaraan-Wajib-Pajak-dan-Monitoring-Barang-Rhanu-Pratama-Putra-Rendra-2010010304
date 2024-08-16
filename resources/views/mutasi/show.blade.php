@@ -21,7 +21,7 @@
                             </li>
                             <li class="list-group-item">Samsat Setelah Mutasi : {{ $mutasi->samsat_tujuan->nama_samsat
                                 }}</li>
-                            <li class="list-group-item">Pemilik Kendaraan : {{ $mutasi->wajib_pajak->nama_wp }}</li>
+                            <li class="list-group-item">Pemutasi : {{ $mutasi->wajib_pajak->nama_wp }}</li>
                             <li class="list-group-item">Nomor Polisi Sebelum Mutasi : {{ $mutasi->no_pol_lama }}</li>
                             <li class="list-group-item">Nomor Polisi Setelah Mutasi : {{ $mutasi->no_pol_baru }}</li>
                             <li class="list-group-item">Status Mutasi :

@@ -7,6 +7,8 @@
 <div id="success_create"></div>
 @elseif (session('success_edit'))
 <div id="success_edit"></div>
+@elseif (session('fail_edit'))
+<div id="fail_edit"></div>
 @endif
 
 <a href="/mutasi/create" a class="btn btn-success mb-2">Tambah Mutasi</a>

@@ -24,8 +24,7 @@
                             <li class="list-group-item">No Polisi : {{ $bpkb->no_polisi }}
                             </li>
                             <li class="list-group-item">Tahun Pembuatan : {{
-                                \Carbon\Carbon::parse($bpkb->tahun_buat)->isoFormat('dddd, D MMMM Y'); }} ({{
-                                \Carbon\Carbon::parse($bpkb->tahun_buat)->diffForHumans() }})</li>
+                                \Carbon\Carbon::parse($bpkb->tahun_buat)->isoFormat('dddd, D MMMM Y'); }}</li>
                             <li class="list-group-item">Didaftarkan Pada Samsat : {{
                                 $bpkb->samsat_awal->nama_samsat }}</li>
                             <li class="list-group-item">Terdaftar Sekarang : {{
