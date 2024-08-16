@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('no_bpkb')->unique();
             $table->string('no_polisi')->unique();
             $table->date('tahun_buat');
+            $table->integer('pajak');
             $table->string('keterangan');
             $table->foreignId('samsat_awal_id')->constrained('samsats')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreignId('samsat_sekarang_id')->constrained('samsats')->onUpdate('CASCADE')->onDelete('CASCADE');

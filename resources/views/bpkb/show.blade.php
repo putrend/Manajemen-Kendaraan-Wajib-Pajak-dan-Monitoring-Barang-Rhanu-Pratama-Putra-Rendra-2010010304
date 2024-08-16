@@ -29,6 +29,9 @@
                                 $bpkb->samsat_awal->nama_samsat }}</li>
                             <li class="list-group-item">Terdaftar Sekarang : {{
                                 $bpkb->samsat_sekarang->nama_samsat }}</li>
+                            <li class="list-group-item">
+                                Biaya Pajak : Rp. {{ number_format($bpkb->pajak, 2) }}
+                            </li>
                             <li class="list-group-item">Keterangan : {{ $bpkb->keterangan
                                 }}
                             </li>

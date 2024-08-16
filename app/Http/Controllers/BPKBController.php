@@ -72,6 +72,7 @@ class BPKBController extends Controller
             'wajib_pajak_id'        => $request->wajib_pajak_id,
             'samsat_awal_id'        => $request->samsat_awal_id,
             'samsat_sekarang_id'    => $request->samsat_awal_id,
+            'pajak'                 => $request->pajak,
             'kendaraan_id'          => $request->kendaraan_id,
         ]);
 
@@ -132,6 +133,7 @@ class BPKBController extends Controller
         BPKB::where('id', $bpkb->id)->update([
             'no_bpkb'               => $request->no_bpkb,
             'no_polisi'             => 'DA ' . $request->no_polisi . ' ' . $bpkb->samsat_sekarang->kd_samsat,
+            'pajak'                 => $request->pajak,
             'keterangan'            => $request->keterangan,
         ]);
 

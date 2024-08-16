@@ -32,6 +32,10 @@
     <input type="text" name="samsat_awal_id" id="samsat_awal_id" class="form-control" required
         value="{{ $bpkb->samsat_awal->nama_samsat }}" readonly>
 
+    <label for="pajak">Pajak</label>
+    <input type="number" name="pajak" placeholder="Masukkan Pajak" class="form-control" required
+        value="{{ $bpkb->pajak }}">
+
     <label for="keterangan">Keterangan</label>
     <textarea name="keterangan" id="keterangan" cols="30" rows="5" placeholder="Masukkan Keterangan"
         class="form-control">{{ $bpkb->keterangan }}</textarea>

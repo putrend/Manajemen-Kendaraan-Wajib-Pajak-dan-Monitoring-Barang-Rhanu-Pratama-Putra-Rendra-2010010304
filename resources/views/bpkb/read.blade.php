@@ -22,6 +22,7 @@
         <th>Nomor BPKB</th>
         <th>Kendaraan</th>
         <th>STNK</th>
+        <th>Pajak</th>
         <th>Opsi</th>
     </tr>
     @foreach ($bpkb as $index => $b)
@@ -36,6 +37,9 @@
             @else
             <span class="badge badge-danger">Belum Dibuat</span>
             @endif
+        </td>
+        <td>
+            Rp. {{ number_format($b->pajak, 2) }}
         </td>
         <td>
             <form action="/bpkb/{{ $b->id }}" method="post" id="bpkb-delete-form">
