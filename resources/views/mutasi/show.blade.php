@@ -23,7 +23,23 @@
                                 }}</li>
                             <li class="list-group-item">Pemutasi : {{ $mutasi->wajib_pajak->nama_wp }}</li>
                             <li class="list-group-item">Nomor Polisi Sebelum Mutasi : {{ $mutasi->no_pol_lama }}</li>
-                            <li class="list-group-item">Nomor Polisi Setelah Mutasi : {{ $mutasi->no_pol_baru }}</li>
+                            <li class="list-group-item">
+                                Nomor Polisi Setelah Mutasi : {{ $mutasi->no_pol_baru }}
+                                <?php $no_polisi = Str::between($mutasi->no_pol_baru, 'DA ', ' ' . $mutasi->samsat_tujuan->kd_samsat); ?>
+                                @if (Auth()->guard('web')->check())
+                                @if ($no_polisi == 0000)
+                                &nbsp;<span class="badge badge-danger">Harus Diisi</span>
+                                @endif
+                                @endif
+                            </li>
+                            <li class="list-group-item">
+                                Biaya : Rp. {{ number_format($mutasi->biaya, 2) }}
+                                @if (Auth()->guard('web')->check())
+                                @if ($mutasi->biaya == 0)
+                                &nbsp;<span class="badge badge-danger">Harus Diisi</span>
+                                @endif
+                                @endif
+                            </li>
                             <li class="list-group-item">Status Mutasi :
                                 @if ($mutasi->status == 'Berlaku')
                                 <span class="badge badge-success">{{ $mutasi->status }}</span>

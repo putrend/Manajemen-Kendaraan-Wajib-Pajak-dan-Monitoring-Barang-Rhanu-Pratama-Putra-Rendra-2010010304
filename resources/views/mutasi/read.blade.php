@@ -24,6 +24,7 @@
         <th>Wajib Pajak</th>
         <th>Samsat Awal</th>
         <th>Samsat Tujuan</th>
+        <th>Biaya</th>
         <th>Status</th>
         <th>Opsi</th>
     </tr>
@@ -34,6 +35,7 @@
         <td>{{ $m->wajib_pajak->nama_wp }}</td>
         <td>{{ $m->samsat_awal->nama_samsat }}</td>
         <td>{{ $m->samsat_tujuan->nama_samsat }}</td>
+        <td>Rp. {{ number_format($m->biaya, 2) }}</td>
         <td>
             @if ($m->status == 'Berlaku')
             <span class="badge badge-success">{{ $m->status }}</span>
@@ -49,12 +51,14 @@
                 @csrf
                 @method('delete')
                 <a href="/mutasi/{{ $m->id }}" class="btn btn-sm btn-info">Lihat</a>
+                @if (Auth()->guard('web')->check())
                 @if ($m->status == 'Belum Berlaku')
                 <a href="/mutasi/{{ $m->id }}/edit" class="btn btn-sm btn-primary">Ubah</a>
                 @else
                 <a href="/mutasi/{{ $m->id }}/edit" class="btn btn-sm btn-primary disabled">Ubah</a>
                 @endif
                 <button class="btn btn-sm btn-danger mutasi-delete" data-id="{{ $m->id }}">Hapus</button>
+                @endif
             </form>
         </td>
     </tr>

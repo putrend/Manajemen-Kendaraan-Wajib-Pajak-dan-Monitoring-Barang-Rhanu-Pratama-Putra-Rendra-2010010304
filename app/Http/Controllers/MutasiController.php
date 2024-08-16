@@ -81,6 +81,7 @@ class MutasiController extends Controller
                 'bpkb_id'           => 'required',
                 'samsat_tujuan_id'  => 'required',
                 'wajib_pajak_id'    => 'required',
+                'biaya'             => 'required',
                 'no_polisi_baru'    => 'max:4|required',
             ],
             [
@@ -88,6 +89,7 @@ class MutasiController extends Controller
                 'bpkb_id.required'              => 'BPKB Wajib Diisi !',
                 'samsat_tujuan_id.required'     => 'Samsat Tujuan Wajib Diisi !',
                 'wajib_pajak_id.required'       => 'Wajib Pajak Wajib Diisi !',
+                'bpkb_id.required'              => 'Biaya Wajib Diisi !',
                 'no_polisi_baru.max'            => 'Nomor Polisi Maksimal Hanya 4 Angka !',
                 'no_polisi_baru.required'       => 'Nomor Polisi Wajib Diisi !',
             ],
@@ -117,6 +119,7 @@ class MutasiController extends Controller
             'no_pol_lama'           => $bpkb->no_polisi,
             'no_pol_baru'           => 'DA ' . $request->no_polisi_baru . ' ' . $samsat->kd_samsat,
             'status'                => 'Belum Berlaku',
+            'biaya'                 => $request->biaya,
             'keterangan'            => $request->keterangan,
         ]);
 
@@ -167,11 +170,13 @@ class MutasiController extends Controller
             $request->all(),
             [
                 'samsat_tujuan_id'  => 'required',
+                'biaya'             => 'required',
                 'wajib_pajak_id'    => 'required',
                 'no_polisi_baru'    => 'max:4',
             ],
             [
                 // Name custom message for validation
+                'biaya.required'     => 'Biaya Wajib Diisi !',
                 'samsat_tujuan_id.required'     => 'Samsat Tujuan Wajib Diisi !',
                 'wajib_pajak_id.required'       => 'Wajib Pajak Wajib Diisi !',
                 'no_polisi_baru.max'    => 'Nomor Polisi Maksimal Hanya 4 Angka !',
@@ -201,6 +206,7 @@ class MutasiController extends Controller
             'samsat_tujuan_id'      => $request->samsat_tujuan_id,
             'wajib_pajak_id'        => $request->wajib_pajak_id,
             'no_pol_baru'           => 'DA ' . $no_polisi_baru . ' ' . $samsat->kd_samsat,
+            'biaya'                 => $request->biaya,
             'keterangan'            => $request->keterangan,
         ]);
 

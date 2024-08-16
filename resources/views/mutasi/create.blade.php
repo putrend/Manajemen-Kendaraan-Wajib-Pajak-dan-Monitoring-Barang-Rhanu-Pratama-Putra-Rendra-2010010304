@@ -36,8 +36,18 @@
     <input type="hidden" name="wajib_pajak_id" value="{{ Auth::guard('wajibpajak')->user()->id }}">
     @endif
 
+    @if (Auth::guard('web')->check())
     <label for="no_polisi_baru">Nomor Polisi Baru (Masukkan Hanya Angka, MAX : 4 Nomor)</label>
     <input type="number" name="no_polisi_baru" placeholder="Masukkan Nomor Polisi Baru" class="form-control">
+    @elseif (Auth::guard('wajibpajak')->check())
+    <input type="hidden" name="no_polisi_baru" value="0000">
+    @endif
+    @if (Auth::guard('web')->check())
+    <label for="biaya">Biaya</label>
+    <input type="number" name="biaya" placeholder="Masukkan Biaya" class="form-control">
+    @elseif (Auth::guard('wajibpajak')->check())
+    <input type="hidden" name="biaya" value="0">
+    @endif
 
     <label for="keterangan">Keterangan</label>
     <textarea name="keterangan" id="keterangan" cols="30" rows="10" class="form-control"

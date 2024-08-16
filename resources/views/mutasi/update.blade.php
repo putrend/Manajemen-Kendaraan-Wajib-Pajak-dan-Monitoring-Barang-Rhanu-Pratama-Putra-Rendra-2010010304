@@ -50,6 +50,9 @@
     <input type="number" name="no_polisi_baru" placeholder="Masukkan Nomor Polisi Baru" class="form-control"
         value="{{ $no_polisi }}">
 
+    <label for="biaya">Biaya</label>
+    <input type="number" name="biaya" placeholder="Masukkan Biaya" class="form-control" value="{{ $mutasi->biaya }}">
+
     <label for="keterangan">Keterangan</label>
     <textarea name="keterangan" id="keterangan" cols="30" rows="10" class="form-control"
         placeholder="Masukkan Keterangan (Tidak Wajib)">{{ $mutasi->keterangan }}</textarea>
