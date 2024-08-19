@@ -22,9 +22,10 @@ class UserAccess
 
         // Divide user role from routes and actual role user, and get the same role only
         $role = Arr::only(Role::roleToArray(), $userType);
-
         // Check if user role is exists in group role role and redirect
         if (array_key_exists(auth()->user()->role, $role)) {
+            return $next($request);
+        } else if (auth()->guard('wajibpajak')->check() && array_key_exists('4', $role)) {
             return $next($request);
         }
 

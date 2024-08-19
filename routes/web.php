@@ -45,16 +45,37 @@ Route::middleware('auth:wajibpajak,web')->group(function () {
         return view('welcome');
     });
 
+    Route::post('/logout', [LoginController::class, 'logout']);
+});
+
+// Semua User
+Route::middleware(['auth:wajibpajak,web', 'user-access:3|4'])->group(function () {
     // Mutasi Berlaku atau Dibatalkan, proses perubahan status
     Route::post('/mutasi/{mutasi}/berlakukan', [MutasiController::class, 'berlakukan']);
     Route::post('/mutasi/{mutasi}/batalkan', [MutasiController::class, 'batalkan']);
 
     Route::resource('mutasi', MutasiController::class);
-    Route::post('/logout', [LoginController::class, 'logout']);
 });
 
+// Wajib Pajak
+
+// User Admin
 Route::middleware(['auth', 'user-access:1'])->group(function () {
     Route::resource('user', UserController::class);
+});
+
+// User Pegawai Samsat
+Route::middleware(['auth', 'user-access:1|3'])->group(function () {
+    Route::resource('wajib-pajak', WajibPajakController::class);
+    Route::resource('samsat', SamsatController::class);
+    Route::resource('dealer', DealerController::class);
+    Route::resource('kendaraan', KendaraanController::class);
+    Route::resource('bpkb', BPKBController::class);
+    Route::resource('stnk', STNKController::class);
+});
+
+// User Pegawai UPPD
+Route::middleware(['auth', 'user-access:1|2'])->group(function () {
     Route::get('/ruangan/cetak', [RuanganController::class, 'ruanganCetak']);
     Route::resource('ruangan', RuanganController::class);
     Route::resource('kategori', KategoriController::class);
@@ -62,25 +83,10 @@ Route::middleware(['auth', 'user-access:1'])->group(function () {
     Route::resource('barang', BarangController::class);
     Route::get('/barangkeluar/cetak', [BarangKeluarController::class, 'barangkeluarCetak']);
     Route::resource('barangkeluar', BarangKeluarController::class);
-});
-
-Route::middleware(['auth', 'user-access:1|2'])->group(function () {
     Route::get('/kerusakan/cetak', [KerusakanController::class, 'kerusakanCetak']);
     Route::resource('kerusakan', KerusakanController::class);
     Route::get('/kehilangan/cetak', [KehilanganController::class, 'cetakKehilangan']);
     Route::resource('kehilangan', KehilanganController::class);
     Route::get('/perbaikan/cetak', [PerbaikanController::class, 'perbaikanCetak']);
     Route::resource('perbaikan', PerbaikanController::class);
-
-    Route::resource('wajib-pajak', WajibPajakController::class);
-
-    Route::resource('samsat', SamsatController::class);
-
-    Route::resource('dealer', DealerController::class);
-
-    Route::resource('kendaraan', KendaraanController::class);
-
-    Route::resource('bpkb', BPKBController::class);
-
-    Route::resource('stnk', STNKController::class);
 });

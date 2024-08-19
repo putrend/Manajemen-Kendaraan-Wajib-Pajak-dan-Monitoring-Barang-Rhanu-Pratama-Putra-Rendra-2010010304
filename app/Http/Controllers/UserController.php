@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
 
     protected static $roleLists = [
         1 => 'admin',
-        2 => 'pegawai',
+        2 => 'pegawai_uppd',
+        3 => 'pegawai_samsat',
+        4 => 'wajib_pajak',
     ];
 
     /**
@@ -36,7 +39,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        User::create($request->post());
+        $role = 0;
+        if ($request->role == 'admin') {
+            $role = 1;
+        } else if ($request->role == 'pegawai_uppd') {
+            $role = 2;
+        } else if ($request->role == 'pegawai_samsat') {
+            $role = 3;
+        }
+
+
+        // Simpan data ke database
+        User::create([
+            'name'      => $request->name,
+            'username'  => $request->username,
+            'email'     => $request->email,
+            'role'      => $role,
+            'password'  => Hash::make($request->password),
+        ]);
         return redirect('user');
     }
 
@@ -78,7 +98,8 @@ class UserController extends Controller
         return redirect('user');
     }
 
-    public static function roleToArray() {
+    public static function roleToArray()
+    {
         $lists = [];
 
         foreach (static::$roleLists as $key => $value) {
