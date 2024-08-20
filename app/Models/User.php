@@ -79,4 +79,16 @@ class User extends Authenticatable
     {
         return $this->role == 3;
     }
+
+    public function checkRole()
+    {
+        if ($this->role == 1) {
+            $role = 'Admin';
+        } else if ($this->role == 2) {
+            $role = 'Pegawai UPPD';
+        } else if ($this->role == 3) {
+            $role = 'Pegawai Samsat';
+        }
+        return $role;
+    }
 }

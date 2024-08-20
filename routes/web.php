@@ -57,8 +57,6 @@ Route::middleware(['auth:wajibpajak,web', 'user-access:1|3'])->group(function ()
     ]);
 });
 
-
-
 // User Admin
 Route::middleware(['auth', 'user-access:1'])->group(function () {
     Route::resource('user', UserController::class);

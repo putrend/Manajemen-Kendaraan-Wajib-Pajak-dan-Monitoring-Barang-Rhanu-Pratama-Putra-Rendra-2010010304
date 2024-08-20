@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
-use App\Models\Barangkeluar;
-use App\Models\Kerusakan;
+use App\Models\Mutasi;
 use App\Models\Ruangan;
+use App\Models\Kerusakan;
+use App\Models\Barangkeluar;
+use App\Models\Dealer;
+use App\Models\Kendaraan;
+use App\Models\WajibPajak;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -19,7 +23,17 @@ class DashboardController extends Controller
         $ruangan = Ruangan::count();
         $barangkeluar = Barangkeluar::count();
         $kerusakan = Kerusakan::count();
-        return view('home', compact('barang', 'ruangan', 'barangkeluar', 'kerusakan'));
+        $mutasi = Mutasi::count();
+        $wajibpajak = WajibPajak::count();
+        $dealer = Dealer::count();
+        $kendaraan = Kendaraan::count();
+
+        if (Auth()->guard('wajibpajak')->check()) {
+            $wpId = Auth()->guard('wajibpajak')->user()->id;
+            $mutasi = Mutasi::where('wajib_pajak_id', $wpId)->count();
+        }
+
+        return view('home', compact('barang', 'ruangan', 'barangkeluar', 'kerusakan', 'mutasi', 'wajibpajak', 'dealer', 'kendaraan'));
     }
 
     /**
