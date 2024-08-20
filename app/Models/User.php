@@ -39,24 +39,44 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function setPasswordAttribute($password){
+    public function setPasswordAttribute($password)
+    {
         return $this->attributes['password'] = bcrypt($password);
     }
 
-    function kerusakan(){
+    function kerusakan()
+    {
         return $this->hasMany(Kerusakan::class);
     }
 
-    function kehilangan(){
+    function kehilangan()
+    {
         return $this->hasMany(Kehilangan::class);
     }
 
-    function perbaikan(){
+    function perbaikan()
+    {
         return $this->hasMany(Perbaikan::class);
     }
 
-    function barangkeluar(){
+    function barangkeluar()
+    {
         return $this->hasMany(Barangkeluar::class);
     }
 
+    // Function Section
+    public function isAdmin()
+    {
+        return $this->role == 1;
+    }
+
+    public function isUPPD()
+    {
+        return $this->role == 2;
+    }
+
+    public function isSamsat()
+    {
+        return $this->role == 3;
+    }
 }

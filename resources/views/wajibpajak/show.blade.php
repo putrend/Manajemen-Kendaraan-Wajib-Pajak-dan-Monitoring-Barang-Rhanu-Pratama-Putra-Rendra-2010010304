@@ -35,6 +35,7 @@
                 </div>
             </div>
         </div>
+        @if (Auth()->guard('web')->check())
         <div class="col-3">
             <div class="card">
                 <div class="card-body">
@@ -54,6 +55,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection

@@ -86,8 +86,10 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Nama Pemilik : {{
                                 $mutasi->bpkb->wajib_pajak->nama_wp }}
+                                @if (Auth()->guard('web')->check())
                                 <a href="/wajib-pajak/{{ $mutasi->bpkb->wajib_pajak->id }}"
                                     class="btn btn-info btn-sm float-right">Lihat Wajib Pajak</a>
+                                @endif
                             </li>
                             <li class="list-group-item">No BPKB : {{
                                 $mutasi->bpkb->no_bpkb }}</li>
