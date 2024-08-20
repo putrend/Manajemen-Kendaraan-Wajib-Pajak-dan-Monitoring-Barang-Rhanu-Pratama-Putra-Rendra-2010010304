@@ -495,4 +495,24 @@
             title: text 
         });
     }
+
+    // Fail Search
+    if ($('#fail_search').length) {
+        var text = "{{ session('fail_search') }}"
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "warning",
+            title: text 
+        });
+    }
 </script>

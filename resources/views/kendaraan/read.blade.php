@@ -9,13 +9,31 @@
 <div id="success_edit"></div>
 @endif
 
-<a href="/kendaraan/create" a class="btn btn-success mb-2">Tambah Kendaraan</a>
-<a href="/kendaraan/cetak" target="_blank" class="btn btn-warning mb-2">Cetak Kendaraan</a>
-<form action="/kendaraan/cetak" action="GET">
-    <input type="date" name="period" id="period" class="form-control">
-    <button type="submit" class="btn btn-info form-control">Cetak Periode</button>
+<form action="/kendaraan/cetak" action="GET" target="_blank">
+    <div class="row">
+        <div class="col-5">
+            <select name="dealer_id" id="dealer_id" class="form-control">
+                <option value="">-- Pilih Dealer --</option>
+                @foreach ($dealer as $item)
+                <option value="{{ $item->id }}">{{ $item->nama_dealer }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-4">
+            <select name="status_bpkb" id="status_bpkb" class="form-control">
+                <option value="">-- Pilih Status BPKB --</option>
+                <option value="Dibuat">Dibuat</option>
+                <option value="Belum Dibuat">Belum Dibuat</option>
+            </select>
+        </div>
+
+        <div class="col-3">
+            <button type="submit" class="btn btn-info">Cetak Kendaraan</button>
+            <a href="/kendaraan/create" class="btn btn-success">Tambah Kendaraan</a>
+        </div>
+    </div>
 </form>
-<table class="table table-bordered table-collapsed table-hover">
+<table class="table table-bordered table-collapsed table-hover mt-2">
     <tr class="bg-secondary">
         <th>No.</th>
         <th>Nama Kendaraan</th>

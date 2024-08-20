@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\WajibPajak;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class WajibPajakController extends Controller
 {
@@ -71,5 +72,13 @@ class WajibPajakController extends Controller
     {
         $wajibPajak->delete();
         return redirect('wajib-pajak');
+    }
+
+    public function wajibpajakCetak()
+    {
+        $wajibpajak = WajibPajak::all();
+
+        $pdf = FacadePdf::loadView('wajibpajak.cetak', compact('wajibpajak'));
+        return $pdf->stream();
     }
 }

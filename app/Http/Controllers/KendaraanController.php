@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dealer;
 use App\Models\Kendaraan;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class KendaraanController extends Controller
@@ -14,7 +15,8 @@ class KendaraanController extends Controller
     public function index()
     {
         $kendaraan = Kendaraan::paginate(10);
-        return view('kendaraan.read', compact('kendaraan'));
+        $dealer = Dealer::all();
+        return view('kendaraan.read', compact('kendaraan', 'dealer'));
     }
 
     /**
@@ -70,5 +72,26 @@ class KendaraanController extends Controller
     {
         $kendaraan->delete();
         return redirect('kendaraan');
+    }
+
+    public function kendaraanCetak(Request $request)
+    {
+        $dealerId = $request->dealer_id;
+        $status = $request->status_bpkb;
+
+        $kendaraan = Kendaraan::where(function ($query) use ($dealerId, $status) {
+            if ($dealerId) {
+                $query->where('dealer_id', $dealerId);
+            }
+
+            if ($status == 'Dibuat') {
+                $query->whereHas('bpkb');
+            } else if ($status == 'Belum Dibuat') {
+                $query->whereDoesntHave('bpkb');
+            }
+        })->get();
+
+        $pdf = Pdf::loadView('kendaraan.cetak', compact('kendaraan'))->setPaper('a4', 'landscape');
+        return $pdf->stream();
     }
 }

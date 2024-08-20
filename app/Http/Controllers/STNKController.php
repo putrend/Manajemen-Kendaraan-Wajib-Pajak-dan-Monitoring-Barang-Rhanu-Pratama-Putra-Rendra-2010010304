@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\BPKB;
 use App\Models\STNK;
-use Carbon\Carbon;
+use App\Models\Samsat;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;
 
 class STNKController extends Controller
@@ -16,7 +18,8 @@ class STNKController extends Controller
     public function index()
     {
         $stnk = STNK::paginate(10);
-        return view('stnk.read', compact('stnk'));
+        $samsat = Samsat::all();
+        return view('stnk.read', compact('stnk', 'samsat'));
     }
 
     /**
@@ -142,5 +145,21 @@ class STNKController extends Controller
     {
         $stnk->delete();
         return redirect('stnk');
+    }
+
+    public function stnkCetak(Request $request)
+    {
+        $samsatId = $request->samsat_id;
+
+        $stnk = STNK::where(function ($query) use ($samsatId) {
+            if ($samsatId) {
+                $query->whereHas('bpkb', function ($subquery) use ($samsatId) {
+                    $subquery->where('samsat_sekarang_id', $samsatId);
+                });
+            }
+        })->get();
+
+        $pdf = Pdf::loadView('stnk.cetak', compact('stnk'))->setPaper('a4', 'landscape');
+        return $pdf->stream();
     }
 }

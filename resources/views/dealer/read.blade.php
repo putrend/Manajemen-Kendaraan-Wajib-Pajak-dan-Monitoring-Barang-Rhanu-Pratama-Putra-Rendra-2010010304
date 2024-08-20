@@ -11,10 +11,6 @@
 
 <a href="/dealer/create" a class="btn btn-success mb-2">Tambah Dealer</a>
 <a href="/dealer/cetak" target="_blank" class="btn btn-warning mb-2">Cetak Dealer</a>
-<form action="/dealer/cetak" action="GET">
-    <input type="date" name="period" id="period" class="form-control">
-    <button type="submit" class="btn btn-info form-control">Cetak Periode</button>
-</form>
 <table class="table table-bordered table-collapsed table-hover">
     <tr class="bg-secondary">
         <th>No.</th>

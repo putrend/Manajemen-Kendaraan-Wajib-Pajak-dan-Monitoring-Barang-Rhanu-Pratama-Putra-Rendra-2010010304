@@ -51,9 +51,12 @@ Route::middleware(['auth:wajibpajak,web', 'user-access:1|3'])->group(function ()
     // Mutasi Berlaku atau Dibatalkan, proses perubahan status
     Route::post('/mutasi/{mutasi}/berlakukan', [MutasiController::class, 'berlakukan']);
 
+    Route::get('/mutasi/cetak', [MutasiController::class, 'mutasiCetak']);
     Route::resource('mutasi', MutasiController::class)->only([
         'edit',
-        'destroy'
+        'destroy',
+        'store',
+        'update'
     ]);
 });
 
@@ -64,26 +67,40 @@ Route::middleware(['auth', 'user-access:1'])->group(function () {
 
 // User Pegawai Samsat
 Route::middleware(['auth', 'user-access:1|3'])->group(function () {
+    Route::get('/wajib-pajak/cetak', [WajibPajakController::class, 'wajibpajakCetak']);
     Route::resource('wajib-pajak', WajibPajakController::class)->only(
         [
             'index',
             'create',
             'edit',
-            'destroy'
+            'destroy',
+            'store',
+            'update'
         ]
     );
 
+    Route::get('/samsat/cetak', [SamsatController::class, 'samsatCetak']);
     Route::resource('samsat', SamsatController::class);
+
+    Route::get('/dealer/cetak', [DealerController::class, 'dealerCetak']);
     Route::resource('dealer', DealerController::class);
+
+    Route::get('/kendaraan/cetak', [KendaraanController::class, 'kendaraanCetak']);
     Route::resource('kendaraan', KendaraanController::class)->only(
         [
             'index',
             'create',
             'edit',
-            'destroy'
+            'destroy',
+            'store',
+            'update'
         ]
     );
+
+    Route::get('/bpkb/cetak', [BPKBController::class, 'bpkbCetak']);
     Route::resource('bpkb', BPKBController::class);
+
+    Route::get('/stnk/cetak', [STNKController::class, 'stnkCetak']);
     Route::resource('stnk', STNKController::class);
 });
 
@@ -116,7 +133,7 @@ Route::middleware(['auth:wajibpajak,web', 'user-access:1|3|4'])->group(function 
     Route::resource('mutasi', MutasiController::class)->only([
         'index',
         'show',
-        'create'
+        'create',
     ]);
 
     Route::resource('wajib-pajak', WajibPajakController::class)->only(['show']);

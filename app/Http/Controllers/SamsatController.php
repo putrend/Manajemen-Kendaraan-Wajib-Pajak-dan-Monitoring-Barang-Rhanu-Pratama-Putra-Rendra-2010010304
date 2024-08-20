@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Samsat;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SamsatController extends Controller
 {
@@ -65,5 +66,14 @@ class SamsatController extends Controller
     {
         $samsat->delete();
         return redirect('samsat');
+    }
+
+    public function samsatCetak()
+    {
+
+        $samsat = Samsat::all();
+
+        $pdf = Pdf::loadView('samsat.cetak', compact('samsat'));
+        return $pdf->stream();
     }
 }

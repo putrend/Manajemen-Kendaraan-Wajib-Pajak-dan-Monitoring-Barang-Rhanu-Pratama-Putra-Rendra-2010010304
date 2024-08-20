@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dealer;
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DealerController extends Controller
 {
@@ -68,5 +69,12 @@ class DealerController extends Controller
     {
         $dealer->delete();
         return redirect('dealer');
+    }
+
+    public function dealerCetak()
+    {
+        $dealer = Dealer::all();
+        $pdf = Pdf::loadView('dealer.cetak', compact('dealer'));
+        return $pdf->stream();
     }
 }

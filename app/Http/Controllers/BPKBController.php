@@ -8,6 +8,7 @@ use App\Models\Samsat;
 use App\Models\Kendaraan;
 use App\Models\WajibPajak;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;
 
 class BPKBController extends Controller
@@ -18,7 +19,8 @@ class BPKBController extends Controller
     public function index()
     {
         $bpkb = BPKB::paginate(10);
-        return view('bpkb.read', compact('bpkb'));
+        $samsat = Samsat::all();
+        return view('bpkb.read', compact('bpkb', 'samsat'));
     }
 
     /**
@@ -147,5 +149,26 @@ class BPKBController extends Controller
     {
         $bpkb->delete();
         return redirect('bpkb');
+    }
+
+    public function bpkbCetak(Request $request)
+    {
+        $samsatId = $request->samsat_id;
+        $status = $request->status_stnk;
+
+        $bpkb = BPKB::where(function ($query) use ($samsatId, $status) {
+            if ($samsatId) {
+                $query->where('samsat_sekarang_id', $samsatId);
+            }
+
+            if ($status == 'Dibuat') {
+                $query->whereHas('stnk');
+            } else if ($status == 'Belum Dibuat') {
+                $query->whereDoesntHave('stnk');
+            }
+        })->get();
+
+        $pdf = Pdf::loadView('bpkb.cetak', compact('bpkb'))->setPaper('a4', 'landscape');
+        return $pdf->stream();
     }
 }

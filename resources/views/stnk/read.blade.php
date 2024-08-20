@@ -9,13 +9,24 @@
 <div id="success_edit"></div>
 @endif
 
-<a href="/stnk/create" a class="btn btn-success mb-2">Tambah STNK</a>
-<a href="/stnk/cetak" target="_blank" class="btn btn-warning mb-2">Cetak STNK</a>
 <form action="/stnk/cetak" action="GET">
-    <input type="date" name="period" id="period" class="form-control">
-    <button type="submit" class="btn btn-info form-control">Cetak Periode</button>
+    <div class="row">
+        <div class="col-9">
+            <select name="samsat_id" id="samsat_id" class="form-control">
+                <option value="">-- Pilih Samsat Terdaftar --</option>
+                @foreach ($samsat as $item)
+                <option value="{{ $item->id }}">{{ $item->nama_samsat }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-3">
+            <button type="submit" class="btn btn-info">Cetak STNK</button>
+            <a href="/stnk/create" class="btn btn-success">Tambah STNK</a>
+        </div>
+    </div>
 </form>
-<table class="table table-bordered table-collapsed table-hover">
+<table class="table table-bordered table-collapsed table-hover mt-2">
     <tr class="bg-secondary">
         <th>No.</th>
         <th>No STNK</th>

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BPKB;
+use App\Models\STNK;
 use App\Models\Mutasi;
 use App\Models\Samsat;
 use App\Models\WajibPajak;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MutasiBerlakuNotification;
@@ -21,12 +23,13 @@ class MutasiController extends Controller
      */
     public function index()
     {
+        $samsat = Samsat::all();
         if (Auth::guard('wajibpajak')->check()) {
             $mutasi = Mutasi::where('wajib_pajak_id', Auth::guard('wajibpajak')->user()->id)->paginate(10);
         } else {
             $mutasi = Mutasi::paginate(10);
         }
-        return view('mutasi.read', compact('mutasi'));
+        return view('mutasi.read', compact('mutasi', 'samsat'));
     }
 
     /**
@@ -224,7 +227,9 @@ class MutasiController extends Controller
 
     public function berlakukan(Mutasi $mutasi)
     {
-        // // Ubah data Mutasi Menjadi Berlaku
+
+
+        // Ubah data Mutasi Menjadi Berlaku
         Mutasi::where('id', $mutasi->id)->update([
             'status'      => 'Berlaku',
         ]);
@@ -233,6 +238,11 @@ class MutasiController extends Controller
         BPKB::where('id', $mutasi->bpkb_id)->update([
             'no_polisi' => $mutasi->no_pol_baru,
             'samsat_sekarang_id' => $mutasi->samsat_tujuan_id,
+        ]);
+
+        // Ubah data kode_lokasi pada STNK
+        STNK::where('id', $mutasi->bpkb->stnk->id)->update([
+            'kode_lokasi' => $mutasi->bpkb->stnk->bpkb->samsat_sekarang->kd_samsat,
         ]);
 
         Mail::to($mutasi->wajib_pajak->email)
@@ -253,5 +263,37 @@ class MutasiController extends Controller
             ->send(new MutasiDibatalkanNotification($mutasi));
 
         return redirect('mutasi/' . $mutasi->id)->with('success_dibatalkan', 'Mutasi Berhasil Dibatalkan !');
+    }
+
+    public function mutasiCetak(Request $request)
+    {
+        $samsatAwalId = $request->samsat_awal_id;
+        $samsatTujuanId = $request->samsat_tujuan_id;
+        $status = $request->status;
+
+        if ($samsatAwalId && $samsatTujuanId) {
+            if ($samsatAwalId == $samsatTujuanId) {
+                return redirect('mutasi')->with('fail_search', 'Samsat Awal dan Samsat Tujuan Tidak Boleh Sama !');
+            }
+        }
+
+        $mutasi = Mutasi::where(function ($query) use ($samsatAwalId, $samsatTujuanId, $status) {
+            if ($samsatAwalId) {
+                $query->where('samsat_awal_id', $samsatAwalId);
+            }
+
+            if ($samsatTujuanId) {
+                $query->where('samsat_tujuan_id', $samsatTujuanId);
+            }
+
+            if ($status) {
+                $query->where('status', $status);
+            }
+        })->get();
+
+        // dd($mutasi);
+
+        $pdf = Pdf::loadView('mutasi.cetak', compact('mutasi'))->setPaper('a4', 'landscape');
+        return $pdf->stream();
     }
 }

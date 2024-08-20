@@ -11,10 +11,6 @@
 
 <a href="/samsat/create" a class="btn btn-success mb-2">Tambah Samsat</a>
 <a href="/samsat/cetak" target="_blank" class="btn btn-warning mb-2">Cetak Samsat</a>
-<form action="/samsat/cetak" action="GET">
-    <input type="date" name="period" id="period" class="form-control">
-    <button type="submit" class="btn btn-info form-control">Cetak Periode</button>
-</form>
 <table class="table table-bordered table-collapsed table-hover">
     <tr class="bg-secondary">
         <th>No.</th>
