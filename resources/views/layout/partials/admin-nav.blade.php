@@ -159,3 +159,12 @@
         </li>
     </ul>
 </li>
+
+<li class="nav-item">
+    <a href="/laporan" class="nav-link {{ request()->is('laporan') ? 'active' : '' }}">
+        <i class="nav-icon fa-solid fa-file-lines"></i>
+        <p>
+            Laporan
+        </p>
+    </a>
+</li>

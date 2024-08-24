@@ -27,11 +27,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory()->create([
-            'name' => 'Mas Pegawai',
-            'username' => 'pegawai',
-            'email' => 'pegawai@gmail.com',
+            'name' => 'Mas Pegawai UPPD',
+            'username' => 'uppd',
+            'email' => 'uppd@gmail.com',
             'password' => '12345',
             'role' => '2'
+        ]);
+
+        \App\Models\User::factory()->create([
+            'name' => 'Mas Pegawai Samsat',
+            'username' => 'samsat',
+            'email' => 'samsat@gmail.com',
+            'password' => '12345',
+            'role' => '3'
         ]);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DealerController;
 use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\SamsatController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\DashboardController;
@@ -46,12 +47,35 @@ Route::middleware('auth:wajibpajak,web')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 
+// User Admin
+Route::middleware(['auth', 'user-access:1'])->group(function () {
+
+    // Cetak Samsat
+    Route::get('/samsat/cetak', [SamsatController::class, 'samsatCetak']);
+    Route::get('/dealer/cetak', [DealerController::class, 'dealerCetak']);
+    Route::get('/kendaraan/cetak', [KendaraanController::class, 'kendaraanCetak']);
+    Route::get('/bpkb/cetak', [BPKBController::class, 'bpkbCetak']);
+    Route::get('/stnk/cetak', [STNKController::class, 'stnkCetak']);
+    Route::get('/wajib-pajak/cetak', [WajibPajakController::class, 'wajibpajakCetak']);
+    Route::get('/mutasi/cetak', [MutasiController::class, 'mutasiCetak']);
+
+    // Cetak UPPD
+    Route::get('/ruangan/cetak', [RuanganController::class, 'ruanganCetak']);
+    Route::get('/barang/cetak', [BarangController::class, 'barangCetak']);
+    Route::get('/barangkeluar/cetak', [BarangKeluarController::class, 'barangkeluarCetak']);
+    Route::get('/kerusakan/cetak', [KerusakanController::class, 'kerusakanCetak']);
+    Route::get('/kehilangan/cetak', [KehilanganController::class, 'cetakKehilangan']);
+    Route::get('/perbaikan/cetak', [PerbaikanController::class, 'perbaikanCetak']);
+
+    Route::resource('user', UserController::class);
+    Route::resource('laporan', LaporanController::class);
+});
+
 // Semua User
-Route::middleware(['auth:wajibpajak,web', 'user-access:1|3'])->group(function () {
+Route::middleware(['auth', 'user-access:1|3'])->group(function () {
     // Mutasi Berlaku atau Dibatalkan, proses perubahan status
     Route::post('/mutasi/{mutasi}/berlakukan', [MutasiController::class, 'berlakukan']);
 
-    Route::get('/mutasi/cetak', [MutasiController::class, 'mutasiCetak']);
     Route::resource('mutasi', MutasiController::class)->only([
         'edit',
         'destroy',
@@ -60,14 +84,8 @@ Route::middleware(['auth:wajibpajak,web', 'user-access:1|3'])->group(function ()
     ]);
 });
 
-// User Admin
-Route::middleware(['auth', 'user-access:1'])->group(function () {
-    Route::resource('user', UserController::class);
-});
-
 // User Pegawai Samsat
 Route::middleware(['auth', 'user-access:1|3'])->group(function () {
-    Route::get('/wajib-pajak/cetak', [WajibPajakController::class, 'wajibpajakCetak']);
     Route::resource('wajib-pajak', WajibPajakController::class)->only(
         [
             'index',
@@ -79,13 +97,8 @@ Route::middleware(['auth', 'user-access:1|3'])->group(function () {
         ]
     );
 
-    Route::get('/samsat/cetak', [SamsatController::class, 'samsatCetak']);
     Route::resource('samsat', SamsatController::class);
-
-    Route::get('/dealer/cetak', [DealerController::class, 'dealerCetak']);
     Route::resource('dealer', DealerController::class);
-
-    Route::get('/kendaraan/cetak', [KendaraanController::class, 'kendaraanCetak']);
     Route::resource('kendaraan', KendaraanController::class)->only(
         [
             'index',
@@ -96,34 +109,18 @@ Route::middleware(['auth', 'user-access:1|3'])->group(function () {
             'update'
         ]
     );
-
-    Route::get('/bpkb/cetak', [BPKBController::class, 'bpkbCetak']);
     Route::resource('bpkb', BPKBController::class);
-
-    Route::get('/stnk/cetak', [STNKController::class, 'stnkCetak']);
     Route::resource('stnk', STNKController::class);
 });
 
 // User Pegawai UPPD
 Route::middleware(['auth', 'user-access:1|2'])->group(function () {
-    Route::get('/ruangan/cetak', [RuanganController::class, 'ruanganCetak']);
     Route::resource('ruangan', RuanganController::class);
-
     Route::resource('kategori', KategoriController::class);
-
-    Route::get('/barang/cetak', [BarangController::class, 'barangCetak']);
     Route::resource('barang', BarangController::class);
-
-    Route::get('/barangkeluar/cetak', [BarangKeluarController::class, 'barangkeluarCetak']);
     Route::resource('barangkeluar', BarangKeluarController::class);
-
-    Route::get('/kerusakan/cetak', [KerusakanController::class, 'kerusakanCetak']);
     Route::resource('kerusakan', KerusakanController::class);
-
-    Route::get('/kehilangan/cetak', [KehilanganController::class, 'cetakKehilangan']);
     Route::resource('kehilangan', KehilanganController::class);
-
-    Route::get('/perbaikan/cetak', [PerbaikanController::class, 'perbaikanCetak']);
     Route::resource('perbaikan', PerbaikanController::class);
 });
 

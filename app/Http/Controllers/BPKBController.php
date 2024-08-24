@@ -19,8 +19,7 @@ class BPKBController extends Controller
     public function index()
     {
         $bpkb = BPKB::paginate(10);
-        $samsat = Samsat::all();
-        return view('bpkb.read', compact('bpkb', 'samsat'));
+        return view('bpkb.read', compact('bpkb'));
     }
 
     /**

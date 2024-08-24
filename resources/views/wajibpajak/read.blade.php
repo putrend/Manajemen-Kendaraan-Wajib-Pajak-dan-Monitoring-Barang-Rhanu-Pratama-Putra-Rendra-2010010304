@@ -10,7 +10,6 @@
 @endif
 
 <a href="/wajib-pajak/create" class="btn btn-success mb-2">Tambah Wajib Pajak</a>
-<a href="/wajib-pajak/cetak" class="btn btn-warning mb-2">Cetak Wajib Pajak</a>
 <table class="table table-bordered table-collapsed table-hover">
     <tr class="bg-secondary">
         <th>No.</th>

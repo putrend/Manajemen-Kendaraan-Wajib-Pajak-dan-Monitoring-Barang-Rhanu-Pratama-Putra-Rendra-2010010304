@@ -9,30 +9,7 @@
 <div id="success_edit"></div>
 @endif
 
-<form action="/kendaraan/cetak" action="GET" target="_blank">
-    <div class="row">
-        <div class="col-5">
-            <select name="dealer_id" id="dealer_id" class="form-control">
-                <option value="">-- Pilih Dealer --</option>
-                @foreach ($dealer as $item)
-                <option value="{{ $item->id }}">{{ $item->nama_dealer }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-4">
-            <select name="status_bpkb" id="status_bpkb" class="form-control">
-                <option value="">-- Pilih Status BPKB --</option>
-                <option value="Dibuat">Dibuat</option>
-                <option value="Belum Dibuat">Belum Dibuat</option>
-            </select>
-        </div>
-
-        <div class="col-3">
-            <button type="submit" class="btn btn-info">Cetak Kendaraan</button>
-            <a href="/kendaraan/create" class="btn btn-success">Tambah Kendaraan</a>
-        </div>
-    </div>
-</form>
+<a href="/kendaraan/create" class="btn btn-success">Tambah Kendaraan</a>
 <table class="table table-bordered table-collapsed table-hover mt-2">
     <tr class="bg-secondary">
         <th>No.</th>

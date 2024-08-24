@@ -15,8 +15,7 @@ class KendaraanController extends Controller
     public function index()
     {
         $kendaraan = Kendaraan::paginate(10);
-        $dealer = Dealer::all();
-        return view('kendaraan.read', compact('kendaraan', 'dealer'));
+        return view('kendaraan.read', compact('kendaraan'));
     }
 
     /**

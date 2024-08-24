@@ -9,30 +9,7 @@
 <div id="success_edit"></div>
 @endif
 
-<form action="/bpkb/cetak" action="GET" target="_blank">
-    <div class="row">
-        <div class="col-5">
-            <select name="samsat_id" id="samsat_id" class="form-control">
-                <option value="">-- Pilih Samsat Terdaftar --</option>
-                @foreach ($samsat as $item)
-                <option value="{{ $item->id }}">{{ $item->nama_samsat }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-4">
-            <select name="status_stnk" id="status_stnk" class="form-control">
-                <option value="">-- Pilih Status STNK --</option>
-                <option value="Dibuat">Dibuat</option>
-                <option value="Belum Dibuat">Belum Dibuat</option>
-            </select>
-        </div>
-
-        <div class="col-3">
-            <button type="submit" class="btn btn-info">Cetak BPKB</button>
-            <a href="/bpkb/create" class="btn btn-success">Tambah BPKB</a>
-        </div>
-    </div>
-</form>
+<a href="/bpkb/create" class="btn btn-success">Tambah BPKB</a>
 <table class="table table-bordered table-collapsed table-hover mt-2">
     <tr class="bg-secondary">
         <th>No.</th>

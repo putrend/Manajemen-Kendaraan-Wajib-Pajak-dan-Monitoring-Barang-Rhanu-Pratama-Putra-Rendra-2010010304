@@ -48,14 +48,13 @@ class UserController extends Controller
             $role = 3;
         }
 
-
         // Simpan data ke database
         User::create([
             'name'      => $request->name,
             'username'  => $request->username,
             'email'     => $request->email,
             'role'      => $role,
-            'password'  => Hash::make($request->password),
+            'password'  => $request->password,
         ]);
         return redirect('user');
     }

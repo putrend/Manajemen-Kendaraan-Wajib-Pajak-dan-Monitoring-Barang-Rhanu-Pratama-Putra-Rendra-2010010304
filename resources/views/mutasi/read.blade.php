@@ -13,43 +13,7 @@
 <div id="fail_search"></div>
 @endif
 
-@if (auth()->guard('web')->check())
-<form action="/mutasi/cetak" action="GET">
-    <div class="row">
-        <div class="col-3">
-            <select name="samsat_awal_id" id="samsat_awal_id" class="form-control">
-                <option value="">-- Pilih Samsat Awal --</option>
-                @foreach ($samsat as $item)
-                <option value="{{ $item->id }}">{{ $item->nama_samsat }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-3">
-            <select name="samsat_tujuan_id" id="samsat_tujuan_id" class="form-control">
-                <option value="">-- Pilih Samsat Tujuan --</option>
-                @foreach ($samsat as $item)
-                <option value="{{ $item->id }}">{{ $item->nama_samsat }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-3">
-            <select name="status" id="status" class="form-control">
-                <option value="">-- Pilih Status Mutasi --</option>
-                <option value="Berlaku">Berlaku</option>
-                <option value="Belum Berlaku">Belum Berlaku</option>
-                <option value="Dibatalkan">Dibatalkan</option>
-            </select>
-        </div>
-
-        <div class="col-3">
-            <button type="submit" class="btn btn-info">Cetak BPKB</button>
-            <a href="/mutasi/create" a class="btn btn-success">Tambah Mutasi</a>
-        </div>
-    </div>
-</form>
-@else
 <a href="/mutasi/create" a class="btn btn-success mb-2">Tambah Mutasi</a>
-@endif
 <table class="table table-bordered table-collapsed table-hover mt-2">
     <tr class="bg-secondary">
         <th>No.</th>

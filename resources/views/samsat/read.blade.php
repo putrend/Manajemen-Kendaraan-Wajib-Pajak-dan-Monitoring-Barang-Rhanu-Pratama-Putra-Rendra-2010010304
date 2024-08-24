@@ -10,7 +10,6 @@
 @endif
 
 <a href="/samsat/create" a class="btn btn-success mb-2">Tambah Samsat</a>
-<a href="/samsat/cetak" target="_blank" class="btn btn-warning mb-2">Cetak Samsat</a>
 <table class="table table-bordered table-collapsed table-hover">
     <tr class="bg-secondary">
         <th>No.</th>

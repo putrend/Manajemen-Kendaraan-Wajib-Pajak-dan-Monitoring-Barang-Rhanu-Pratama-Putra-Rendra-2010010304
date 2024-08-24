@@ -18,8 +18,7 @@ class STNKController extends Controller
     public function index()
     {
         $stnk = STNK::paginate(10);
-        $samsat = Samsat::all();
-        return view('stnk.read', compact('stnk', 'samsat'));
+        return view('stnk.read', compact('stnk'));
     }
 
     /**
