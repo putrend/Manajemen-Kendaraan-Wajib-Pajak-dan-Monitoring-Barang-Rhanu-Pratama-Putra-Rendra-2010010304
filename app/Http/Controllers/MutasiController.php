@@ -13,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MutasiBerlakuNotification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\MutasiDibatalkanNotification;
 
@@ -168,52 +169,167 @@ class MutasiController extends Controller
      */
     public function update(Request $request, Mutasi $mutasi)
     {
-        // Validate No Polisi
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'samsat_tujuan_id'  => 'required',
-                'biaya'             => 'required',
-                'wajib_pajak_id'    => 'required',
-                'no_polisi_baru'    => 'max:4',
-            ],
-            [
-                // Name custom message for validation
-                'biaya.required'     => 'Biaya Wajib Diisi !',
-                'samsat_tujuan_id.required'     => 'Samsat Tujuan Wajib Diisi !',
-                'wajib_pajak_id.required'       => 'Wajib Pajak Wajib Diisi !',
-                'no_polisi_baru.max'    => 'Nomor Polisi Maksimal Hanya 4 Angka !',
-            ],
-        );
 
-        if ($validator->fails()) {
-            return redirect('mutasi/' . $mutasi->id . '/edit')->with('fail_edit', $validator->errors()->first());
+        if ($request->stnk_asli) {
+            $request->validate([
+                'stnk_asli' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->stnk_asli) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->stnk_asli);
+                unlink($imagePath);
+            }
+
+            $imageName = 'STNKASLI-' . $mutasi->id . '.' . $request->stnk_asli->extension();
+            $request->stnk_asli->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'stnk_asli'   => $imageName,
+            ]);
+        } else if ($request->bpkb_asli) {
+            $request->validate([
+                'bpkb_asli' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->bpkb_asli) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->bpkb_asli);
+                unlink($imagePath);
+            }
+
+            $imageName = 'BPKBASLI-' . $mutasi->id . '.' . $request->bpkb_asli->extension();
+            $request->bpkb_asli->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'bpkb_asli'   => $imageName,
+            ]);
+        } else if ($request->ktp_asli) {
+            $request->validate([
+                'ktp_asli' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->ktp_asli) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->ktp_asli);
+                unlink($imagePath);
+            }
+
+            $imageName = 'KTPASLI-' . $mutasi->id . '.' . $request->ktp_asli->extension();
+            $request->ktp_asli->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'ktp_asli'   => $imageName,
+            ]);
+        } else if ($request->kwitansi_jb) {
+            $request->validate([
+                'kwitansi_jb' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->kwitansi_jb) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->kwitansi_jb);
+                unlink($imagePath);
+            }
+
+            $imageName = 'KWITANSIJB-' . $mutasi->id . '.' . $request->kwitansi_jb->extension();
+            $request->kwitansi_jb->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'kwitansi_jb'   => $imageName,
+            ]);
+        } else if ($request->surat_pelepasan) {
+            $request->validate([
+                'surat_pelepasan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->surat_pelepasan) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->surat_pelepasan);
+                unlink($imagePath);
+            }
+
+            $imageName = 'SURATPELEPASAN-' . $mutasi->id . '.' . $request->surat_pelepasan->extension();
+            $request->surat_pelepasan->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'surat_pelepasan'   => $imageName,
+            ]);
+        } else if ($request->cek_fisik_kendaraan) {
+            $request->validate([
+                'cek_fisik_kendaraan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->cek_fisik_kendaraan) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->cek_fisik_kendaraan);
+                unlink($imagePath);
+            }
+
+            $imageName = 'CEKFISIKKENDARAAN-' . $mutasi->id . '.' . $request->cek_fisik_kendaraan->extension();
+            $request->cek_fisik_kendaraan->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'cek_fisik_kendaraan'   => $imageName,
+            ]);
+        } else if ($request->surat_kuasa) {
+            $request->validate([
+                'surat_kuasa' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($mutasi->surat_kuasa) {
+                $imagePath = public_path('images/' . $mutasi->id . '/' . $mutasi->surat_kuasa);
+                unlink($imagePath);
+            }
+
+            $imageName = 'SURATKUASA-' . $mutasi->id . '.' . $request->surat_kuasa->extension();
+            $request->surat_kuasa->move(public_path('images/' . $mutasi->id . ''), $imageName);
+
+            $mutasi->update([
+                'surat_kuasa'   => $imageName,
+            ]);
+        } else {
+            // Validate No Polisi
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'samsat_tujuan_id'  => 'required',
+                    'biaya'             => 'required',
+                    'wajib_pajak_id'    => 'required',
+                    'no_polisi_baru'    => 'max:4',
+                ],
+                [
+                    // Name custom message for validation
+                    'biaya.required'     => 'Biaya Wajib Diisi !',
+                    'samsat_tujuan_id.required'     => 'Samsat Tujuan Wajib Diisi !',
+                    'wajib_pajak_id.required'       => 'Wajib Pajak Wajib Diisi !',
+                    'no_polisi_baru.max'    => 'Nomor Polisi Maksimal Hanya 4 Angka !',
+                ],
+            );
+
+            if ($validator->fails()) {
+                return redirect('mutasi/' . $mutasi->id . '/edit')->with('fail_edit', $validator->errors()->first());
+            }
+
+            $no_polisi_baru = $request->no_polisi_baru;
+            if ($no_polisi_baru == null) {
+
+                $no_polisi_baru = Str::between($mutasi->no_pol_baru, 'DA ', ' ' . $mutasi->samsat_tujuan->kd_samsat);
+            }
+
+            // Validate samsat tujuan
+            if ($mutasi->samsat_awal->id == $request->samsat_tujuan_id) {
+                return redirect('mutasi/' . $mutasi->id . '/edit')->with('fail_edit', 'Samsat Tujuan Tidak Boleh Sama Dengan Samsat Anda Sekarang !');
+            }
+
+            // Get Kode Samsat for No Pol
+            $samsat = Samsat::where('id', $request->samsat_tujuan_id)->first();
+
+            // Simpan data ke database
+            Mutasi::where('id', $mutasi->id)->update([
+                'samsat_tujuan_id'      => $request->samsat_tujuan_id,
+                'wajib_pajak_id'        => $request->wajib_pajak_id,
+                'no_pol_baru'           => 'DA ' . $no_polisi_baru . ' ' . $samsat->kd_samsat,
+                'biaya'                 => $request->biaya,
+                'keterangan'            => $request->keterangan,
+            ]);
+            return redirect('mutasi')->with('success_edit', 'Mutasi Berhasil Di Ubah !');
         }
-
-        $no_polisi_baru = $request->no_polisi_baru;
-        if ($no_polisi_baru == null) {
-
-            $no_polisi_baru = Str::between($mutasi->no_pol_baru, 'DA ', ' ' . $mutasi->samsat_tujuan->kd_samsat);
-        }
-
-        // Validate samsat tujuan
-        if ($mutasi->samsat_awal->id == $request->samsat_tujuan_id) {
-            return redirect('mutasi/' . $mutasi->id . '/edit')->with('fail_edit', 'Samsat Tujuan Tidak Boleh Sama Dengan Samsat Anda Sekarang !');
-        }
-
-        // Get Kode Samsat for No Pol
-        $samsat = Samsat::where('id', $request->samsat_tujuan_id)->first();
-
-        // Simpan data ke database
-        Mutasi::where('id', $mutasi->id)->update([
-            'samsat_tujuan_id'      => $request->samsat_tujuan_id,
-            'wajib_pajak_id'        => $request->wajib_pajak_id,
-            'no_pol_baru'           => 'DA ' . $no_polisi_baru . ' ' . $samsat->kd_samsat,
-            'biaya'                 => $request->biaya,
-            'keterangan'            => $request->keterangan,
-        ]);
-
-        return redirect('mutasi')->with('success_edit', 'Mutasi Berhasil Di Ubah !');
+        return redirect('mutasi/' . $mutasi->id)->with('success_edit', 'Berkas Berhasil Di Upload !');
     }
 
     /**
@@ -227,7 +343,9 @@ class MutasiController extends Controller
 
     public function berlakukan(Mutasi $mutasi)
     {
-
+        if ($mutasi->stnk_asli == NULL || $mutasi->bpkb_asli == NULL || $mutasi->ktp_asli == NULL || $mutasi->kwitansi_jb == NULL || $mutasi->cek_fisik_kendaraan == NULL || $mutasi->surat_kuasa == NULL) {
+            return redirect('mutasi/' . $mutasi->id)->with('gagal_berlaku', 'Mutasi Gagal Diberlakukan, Lengkapi Berkas Terlebih Dahulu !');
+        }
 
         // Ubah data Mutasi Menjadi Berlaku
         Mutasi::where('id', $mutasi->id)->update([

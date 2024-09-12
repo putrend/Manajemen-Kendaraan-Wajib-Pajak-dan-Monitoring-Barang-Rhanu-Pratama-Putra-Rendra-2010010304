@@ -476,6 +476,26 @@
         });
     }
 
+    // Gagal Berlaku
+    if ($('#gagal_berlaku').length) {
+        var text = "{{ session('gagal_berlaku') }}"
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "warning",
+            title: text 
+        });
+    }
+
     // Access Failed
     if ($('#fail_access').length) {
         var text = "{{ session('fail_access') }}"
