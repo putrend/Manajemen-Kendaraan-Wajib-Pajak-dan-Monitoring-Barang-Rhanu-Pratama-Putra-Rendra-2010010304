@@ -87,15 +87,16 @@ class KerusakanController extends Controller
     //     return $pdf->stream();
     // }
 
-    public function kerusakanCetak(Request $request){
+    public function kerusakanCetak(Request $request)
+    {
         $date = Carbon::parse($request->period)->format('Y-m');
-        if ($request->period){
+        if ($request->period) {
             $kerusakan = Kerusakan::whereMonth('created_at', Carbon::parse($date)->month)
-            ->whereYear('created_at', Carbon::parse($date)->year)->get();            
-        }else{
+                ->whereYear('created_at', Carbon::parse($date)->year)->get();
+        } else {
             $kerusakan = Kerusakan::all();
         }
-        
+
         $pdf = FacadePdf::loadView('kerusakan.cetak', compact('kerusakan'));
         return $pdf->stream();
     }

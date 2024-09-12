@@ -79,7 +79,6 @@ Route::middleware(['auth', 'user-access:1|3'])->group(function () {
     Route::resource('mutasi', MutasiController::class)->only([
         'edit',
         'destroy',
-        'store',
         'update'
     ]);
 });
@@ -131,6 +130,7 @@ Route::middleware(['auth:wajibpajak,web', 'user-access:1|3|4'])->group(function 
         'index',
         'show',
         'create',
+        'store',
     ]);
 
     Route::resource('wajib-pajak', WajibPajakController::class)->only(['show']);
